@@ -1,7 +1,7 @@
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+package ro.ase.PPOO;
+
+import java.io.*;
+import java.util.*;
 
 public class Comanda implements ServiciiClient{
     private int id;
@@ -27,6 +27,14 @@ public class Comanda implements ServiciiClient{
         this.idClient = idClient;
         this.nrProduse = nrProduse;
         this.idProduse = idProduse;
+
+        try (var fisier = new BufferedWriter(new FileWriter("C:\\Users\\Alex Isvoranu\\Desktop\\Facultate\\PPOO\\Proiect\\src\\ro\\ase\\PPOO\\Date\\comenzi.txt"))) {
+
+            fisier.write(id+","+numar+","+valoareTotala+","+dataPlasare+","+adresaLivrare+","+tipPlata+","+idClient+","+nrProduse+","+idProduse.toString());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int getId() {
@@ -117,17 +125,37 @@ public class Comanda implements ServiciiClient{
     }
 
     @Override
-    public void aplicaDiscount(float discount) {
-
+    public void aplicaDiscount(float discount) throws InvalidDiscountException {
+        if (discount < 0 || discount >= 100) {
+            throw new InvalidDiscountException("Discountul trebuie sa fie o valoare cuprinsa intre 0 si 100");
+        }
+        else{
+            this.valoareTotala -= this.valoareTotala * (discount / 100);
+        }
     }
 
     @Override
-    public List<Comanda> vizualizeazaIstoricComenzi(int idClient) {
-        return null;
+    public Queue<Comanda> vizualizeazaIstoricComenzi(int idClient) {
+        Queue<Comanda> istoricComenzi = new PriorityQueue<>(Comparator.comparing(Comanda::getDataPlasare));
+
+        return istoricComenzi;
     }
 
+
     @Override
-    public Map<String, Object> obtineStatisticiClient(int idClient) {
-        return null;
+    public Object[][] obtineStatisticiClient(int idClient) {
+        Object[][] statistici = new Object[3][2];
+
+        statistici[0][0] = "Numărul total de comenzi";
+        statistici[0][1] = 5;
+
+        statistici[1][0] = "Valoarea totală a comenzilor";
+        statistici[1][1] = 750.0;
+
+        statistici[2][0] = "Data ultimei comenzi";
+        statistici[2][1] = new Date();
+
+        return statistici;
     }
+
 }

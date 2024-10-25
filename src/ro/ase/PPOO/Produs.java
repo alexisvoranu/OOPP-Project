@@ -1,3 +1,5 @@
+package ro.ase.PPOO;
+
 public class Produs {
     private int id;
     private String nume;
