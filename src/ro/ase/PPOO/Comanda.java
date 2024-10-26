@@ -30,7 +30,10 @@ public class Comanda implements ServiciiClient{
 
         try (var fisier = new BufferedWriter(new FileWriter("C:\\Users\\Alex Isvoranu\\Desktop\\Facultate\\PPOO\\Proiect\\src\\ro\\ase\\PPOO\\Date\\comenzi.txt"))) {
 
-            fisier.write(id+","+numar+","+valoareTotala+","+dataPlasare+","+adresaLivrare+","+tipPlata+","+idClient+","+nrProduse+","+idProduse.toString());
+            fisier.write(id+"\t"+numar+"\t"+valoareTotala+"\t"+dataPlasare+"\t"+adresaLivrare+"\t"+tipPlata+"\t"+idClient+"\t"+nrProduse+"\t");
+            for(int i=0;i<nrProduse;i++)
+                fisier.write(idProduse[i]+"\t");
+            fisier.newLine();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
