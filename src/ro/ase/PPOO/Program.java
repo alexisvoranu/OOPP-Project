@@ -62,23 +62,26 @@ public class Program {
                 String[] valori = linie.split("\t");
 
                 int id = Integer.parseInt(valori[0]);
-                int numar = Integer.parseInt(valori[1]);
-                double valoareTotala = Double.parseDouble(valori[2]);
-                Date dataPlasare = dateFormat.parse(valori[3]);
-                String adresaLivrare = valori[4];
-                String tipPlata = valori[5];
-                int idClient = Integer.parseInt(valori[6]);
-                int nrProduse = Integer.parseInt(valori[7]);
+                double valoareTotala = Double.parseDouble(valori[1]);
+                Date dataPlasare = dateFormat.parse(valori[2]);
+                String adresaLivrare = valori[3];
+                String tipPlata = valori[4];
+                int idClient = Integer.parseInt(valori[5]);
+                int nrProduse = Integer.parseInt(valori[6]);
 
-                int[] idProduse = new int[nrProduse];
+                int[][] produse = new int[nrProduse][2];
+                int index = 7; // Starting index for the product data
+
                 for (int i = 0; i < nrProduse; i++) {
-                    idProduse[i] = Integer.parseInt(valori[8 + i]);
+                    produse[i][0] = Integer.parseInt(valori[index++]); // First part of the pair
+                    produse[i][1] = Integer.parseInt(valori[index++]); // Second part of the pair
                 }
 
-                Comanda comanda = new Comanda(id, numar, valoareTotala, dataPlasare,
-                        adresaLivrare, tipPlata, idClient, nrProduse, idProduse);
+                Comanda comanda = new Comanda(id, valoareTotala, dataPlasare,
+                        adresaLivrare, tipPlata, idClient, nrProduse, produse);
                 comenzi.add(comanda);
             }
+
         } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }
@@ -86,6 +89,16 @@ public class Program {
     }
 
     public static void main(String[] args) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2024, Calendar.OCTOBER, 24, 15, 35);
+        Date dataPlasare = calendar.getTime();
+
+        Comanda comanda1 = new Comanda(10001, 297.5,
+                dataPlasare,
+                "Bucuresti, Str. Frumoasa, nr.7", "ramburs", 1, 3, new int[][]{{1, 3}, {2, 1}, {4, 2}}
+        );
+
         List<Produs> produse = citireProduse();
         List<Client> clienti = citireClienti();
         List<Comanda> comenzi = citireComenzi();
@@ -96,14 +109,7 @@ public class Program {
         System.out.println();
         comenzi.forEach(System.out::println);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.OCTOBER, 24, 15, 35);
-        Date dataPlasare = calendar.getTime();
 
-        Comanda comanda1 = new Comanda(1, 10001, 297.5,
-                dataPlasare,
-                "Bucuresti, Str. Frumoasa, nr.7", "ramburs", 1, 3, new int[]{1, 2, 3}
-        );
 
 
     }
