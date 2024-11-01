@@ -1,107 +1,128 @@
 import ro.ase.PPOO.Client;
 import ro.ase.PPOO.Produs;
+import ro.ase.PPOO.Comanda;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static ro.ase.PPOO.Program.citireClienti;
 import static ro.ase.PPOO.Program.citireProduse;
+import static ro.ase.PPOO.Comanda.adaugaComandaInFisier;
 
 public class OnlineShopping {
-    private JSpinner spinnerClient;
-    private JSpinner spinnerProdus;
+    private JComboBox<String> comboBoxClient;
+    private JComboBox<String> comboBoxProdus;
     private JSpinner spinnerCantitate;
     private JButton adaugaProdusulButton;
     private JTextField textFieldAdresaLivrare;
-    private JSpinner spinnerTipPlata;
+    private JComboBox<String> comboBoxTipPlata;
     private JTextField textFieldValoareTotala;
     private JButton buttonPlasareComanda;
-    private List<int[]> matriceProduse = new ArrayList<>(); // Stores pairs of [product ID, quantity]
-    private List<Produs> produse; // To store product list for total calculation
+    private JFormattedTextField formattedTextField1;
+    private List<int[]> matriceProduseTemp = new ArrayList<>();
+    private int[][] matriceProduse;
+    private List<Produs> produse;
+    private List<Client> clienti;
 
     public OnlineShopping() {
-        List<Client> clienti = citireClienti();
-        produse = citireProduse(); // Store the list of products
+        clienti = citireClienti();
+        produse = citireProduse();
 
         List<String> numeClienti = new ArrayList<>();
         for (Client client : clienti) {
             numeClienti.add(client.getNume() + " " + client.getPrenume());
         }
 
-        SpinnerListModel clientModel = new SpinnerListModel(numeClienti);
-        spinnerClient = new JSpinner(clientModel);
+        // Înlocuim spinnerClient cu comboBoxClient
+        comboBoxClient = new JComboBox<>(numeClienti.toArray(new String[0]));
 
         List<String> numeProduse = new ArrayList<>();
         for (Produs produs : produse) {
-            numeProduse.add(produs.getNume());
+            numeProduse.add(produs.getNume()+", "+produs.getPret()+ " ron, "+ produs.getGarantie() +" luni garantie");
         }
 
-        SpinnerListModel produsModel = new SpinnerListModel(numeProduse);
-        spinnerProdus = new JSpinner(produsModel);
+        // Înlocuim spinnerProdus cu comboBoxProdus
+        comboBoxProdus = new JComboBox<>(numeProduse.toArray(new String[0]));
 
-        spinnerCantitate = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1)); // Spinner for quantity
+        spinnerCantitate = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
 
-        adaugaProdusulButton = new JButton("Adauga Produsul");
+        adaugaProdusulButton = new JButton("Adaugă produsul în coș");
         textFieldAdresaLivrare = new JTextField(20);
-        textFieldValoareTotala = new JTextField(20);
-        textFieldValoareTotala.setEditable(false); // Total value should be read-only
-        spinnerTipPlata = new JSpinner(new SpinnerListModel(new String[]{"Card", "Numerar"}));
-        buttonPlasareComanda = new JButton("Plaseaza Comanda");
+        textFieldValoareTotala = new JTextField(10);
+        textFieldValoareTotala.setEditable(false);
+
+        // Înlocuim spinnerTipPlata cu comboBoxTipPlata
+        comboBoxTipPlata = new JComboBox<>(new String[]{"Card", "Ramburs"});
+
+        buttonPlasareComanda = new JButton("Plasează Comanda");
 
         adaugaProdusulButton.addActionListener(e -> {
-            // Get selected product and quantity
-            int produsIndex = spinnerProdus.getValue() != null ? numeProduse.indexOf(spinnerProdus.getValue().toString()) : -1;
+            int produsIndex = comboBoxProdus.getSelectedIndex();
             int cantitate = (int) spinnerCantitate.getValue();
 
             if (produsIndex >= 0 && produsIndex < produse.size()) {
-                int produsID = produse.get(produsIndex).getId(); // Assuming Produs has a getId() method
-                matriceProduse.add(new int[]{produsID, cantitate});
+                int produsID = produse.get(produsIndex).getId();
+                matriceProduseTemp.add(new int[]{produsID, cantitate});
 
-                // Update the total value
                 double totalValoare = calculateTotal();
                 textFieldValoareTotala.setText(String.valueOf(totalValoare));
 
-                JOptionPane.showMessageDialog(null, "Produsul a fost adaugat: ID=" + produsID + ", Cantitate=" + cantitate);
+                JOptionPane.showMessageDialog(null, cantitate + " produse au fost adaugate în coș!");
             }
         });
 
         buttonPlasareComanda.addActionListener(e -> {
-            // Create order summary
+            matriceProduse = new int[matriceProduseTemp.size()][2];
+            for (int i = 0; i < matriceProduseTemp.size(); i++) {
+                matriceProduse[i][0] = matriceProduseTemp.get(i)[0];
+                matriceProduse[i][1] = matriceProduseTemp.get(i)[1];
+            }
+
             String adresa = textFieldAdresaLivrare.getText();
-            String tipPlata = (String) spinnerTipPlata.getValue();
+            String tipPlata = (String) comboBoxTipPlata.getSelectedItem();
             double totalValoare = calculateTotal();
 
-            if (adresa.isEmpty() || matriceProduse.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Te rog completeaza adresa si adauga produse in comanda!");
+            if (adresa.isEmpty() || matriceProduseTemp.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Te rog completează adresa și adaugă produse în coș!");
             } else {
-                // Display order confirmation
-                StringBuilder comanda = new StringBuilder("Comanda plasata cu succes!\n");
-                comanda.append("Produse:\n");
-                for (int[] produs : matriceProduse) {
-                    comanda.append("Produs ID: ").append(produs[0]).append(", Cantitate: ").append(produs[1]).append("\n");
-                }
-                comanda.append("Adresa de livrare: ").append(adresa).append("\n");
-                comanda.append("Tip de plata: ").append(tipPlata).append("\n");
-                comanda.append("Valoare totala: ").append(totalValoare).append(" lei");
+                int selectedClientIndex = comboBoxClient.getSelectedIndex();
+                if (selectedClientIndex >= 0 && selectedClientIndex < clienti.size()) {
+                    int idClient = clienti.get(selectedClientIndex).getId();
+                    Date dataPlasare = new Date();
+                    int idComanda = generateOrderId();
 
-                JOptionPane.showMessageDialog(null, comanda.toString());
+                    Comanda comanda = new Comanda(
+                            idComanda,
+                            totalValoare,
+                            dataPlasare,
+                            adresa,
+                            tipPlata,
+                            idClient,
+                            matriceProduseTemp.size(),
+                            matriceProduse
+                    );
+
+                    adaugaComandaInFisier(comanda);
+
+                    JOptionPane.showMessageDialog(null, comanda.toString());
+                }
             }
         });
 
-        // Configurare JFrame pentru a testa
-        JFrame frame = new JFrame("Selecteaza Clientul si Produsul");
+        JFrame frame = new JFrame("Selectează clientul și produsul");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
+        frame.setSize(500, 500);
         frame.setLayout(new java.awt.FlowLayout());
 
-        frame.add(new JLabel("Selecteaza Clientul:"));
-        frame.add(spinnerClient);
+        frame.add(new JLabel("Selectează clientul:"));
+        frame.add(comboBoxClient);
 
-        frame.add(new JLabel("Selecteaza Produsul:"));
-        frame.add(spinnerProdus);
+        frame.add(new JLabel("Selectează produsul:"));
+        frame.add(comboBoxProdus);
 
-        frame.add(new JLabel("Selecteaza Cantitatea:"));
+        frame.add(new JLabel("Selectează cantitatea:"));
         frame.add(spinnerCantitate);
 
         frame.add(adaugaProdusulButton);
@@ -109,10 +130,10 @@ public class OnlineShopping {
         frame.add(new JLabel("Adresa de livrare:"));
         frame.add(textFieldAdresaLivrare);
 
-        frame.add(new JLabel("Tip de plata:"));
-        frame.add(spinnerTipPlata);
+        frame.add(new JLabel("Tip de plată:"));
+        frame.add(comboBoxTipPlata);
 
-        frame.add(new JLabel("Valoare totala:"));
+        frame.add(new JLabel("Valoare totală:"));
         frame.add(textFieldValoareTotala);
 
         frame.add(buttonPlasareComanda);
@@ -122,17 +143,19 @@ public class OnlineShopping {
 
     private double calculateTotal() {
         double total = 0;
-        for (int[] produs : matriceProduse) {
-            // Assuming you have a method to get the price of the product
-            // double price = getPriceById(produs[0]); // Implement this method according to your product class
+        for (int[] produs : matriceProduseTemp) {
             double price = produse.stream()
                     .filter(p -> p.getId() == produs[0])
                     .findFirst()
-                    .map(Produs::getPret) // Assuming Produs has a getPret() method
+                    .map(Produs::getPret)
                     .orElse(0.0);
             total += price * produs[1];
         }
         return total;
+    }
+
+    private int generateOrderId() {
+        return (int) (Math.random() * 100000);
     }
 
     public static void main(String[] args) {

@@ -25,16 +25,6 @@ public class Comanda implements ServiciiClient{
         this.idClient = idClient;
         this.nrProduse = nrProduse;
         this.produse = produse;
-
-        try (var fisier = new BufferedWriter(new FileWriter("C:\\Users\\Alex Isvoranu\\Desktop\\Facultate\\PPOO\\Proiect\\src\\ro\\ase\\PPOO\\Date\\comenzi.txt"))) {
-
-            fisier.write(id+"\t"+valoareTotala+"\t"+dataPlasare+"\t"+adresaLivrare+"\t"+tipPlata+"\t"+idClient+"\t"+nrProduse+"\t");
-            for(int i=0;i<nrProduse;i++)
-                fisier.write(produse[i][0]+"\t"+produse[i][1]+"\t");
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public int getId() {
@@ -103,16 +93,10 @@ public class Comanda implements ServiciiClient{
 
     @Override
     public String toString() {
-        return "Comanda{" +
-                "id=" + id +
-                ", valoareTotala=" + valoareTotala +
-                ", dataPlasare=" + dataPlasare +
-                ", adresaLivrare='" + adresaLivrare + '\'' +
-                ", tipPlata='" + tipPlata + '\'' +
-                ", idClient=" + idClient +
-                ", nrProduse=" + nrProduse +
-                ", produse=" + Arrays.toString(produse) +
-                '}';
+        return "Comanda cu " +
+                "numărul " + id +
+                ", având valoarea totală de " + valoareTotala +
+                " ron a fost plasată cu succes!" + dataPlasare;
     }
 
     @Override
@@ -147,6 +131,20 @@ public class Comanda implements ServiciiClient{
         statistici[2][1] = new Date();
 
         return statistici;
+    }
+
+    public static void adaugaComandaInFisier(Comanda comanda){
+        try (var fisier = new BufferedWriter(new FileWriter(
+                "C:\\Users\\Alex Isvoranu\\Desktop\\Facultate\\PPOO\\Proiect\\src\\ro\\ase\\PPOO\\Date\\comenzi.txt", true))) {
+            fisier.write(comanda.id+"\t"+comanda.valoareTotala+"\t"+
+                    comanda.dataPlasare+"\t"+comanda.adresaLivrare+"\t"+
+                    comanda.tipPlata+"\t"+comanda.idClient+"\t"+comanda.nrProduse+"\t");
+            for(int i=0;i<comanda.nrProduse;i++)
+                fisier.write(comanda.produse[i][0]+"\t"+comanda.produse[i][1]+"\t");
+            fisier.newLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
