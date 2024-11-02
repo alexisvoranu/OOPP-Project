@@ -50,8 +50,8 @@ public class Program {
         return produse;
     }
 
-    public static List<Comanda> citireComenzi() {
-        List<Comanda> comenzi = new ArrayList<>();
+    public static Set<Comanda> citireComenzi() {
+        Set<Comanda> comenzi = new TreeSet<>(Comparator.comparing(Comanda::getDataPlasare));
 
         try (BufferedReader fisier = new BufferedReader(new FileReader(
                 "C:\\Users\\Alex Isvoranu\\Desktop\\Facultate\\PPOO\\Proiect\\src\\ro\\ase\\PPOO\\Date\\comenzi.txt"))) {
@@ -70,11 +70,11 @@ public class Program {
                 int nrProduse = Integer.parseInt(valori[6]);
 
                 int[][] produse = new int[nrProduse][2];
-                int index = 7; // Starting index for the product data
+                int index = 7;
 
                 for (int i = 0; i < nrProduse; i++) {
-                    produse[i][0] = Integer.parseInt(valori[index++]); // First part of the pair
-                    produse[i][1] = Integer.parseInt(valori[index++]); // Second part of the pair
+                    produse[i][0] = Integer.parseInt(valori[index++]);
+                    produse[i][1] = Integer.parseInt(valori[index++]);
                 }
 
                 Comanda comanda = new Comanda(id, valoareTotala, dataPlasare,
@@ -88,29 +88,8 @@ public class Program {
         return comenzi;
     }
 
+
     public static void main(String[] args) {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.OCTOBER, 24, 15, 35);
-        Date dataPlasare = calendar.getTime();
-
-        Comanda comanda1 = new Comanda(10001, 297.5,
-                dataPlasare,
-                "Bucuresti, Str. Frumoasa, nr.7", "ramburs", 1, 3, new int[][]{{1, 3}, {2, 1}, {4, 2}}
-        );
-
-        List<Produs> produse = citireProduse();
-        List<Client> clienti = citireClienti();
-        List<Comanda> comenzi = citireComenzi();
-
-        produse.forEach(System.out::println);
-        System.out.println();
-        clienti.forEach(System.out::println);
-        System.out.println();
-        comenzi.forEach(System.out::println);
-
-
-
 
     }
 }

@@ -1,2 +1,3 @@
 63419	3200.5	Fri Nov 01 11:55:09 EET 2024	Bucuresti, Sector 1, Piata Romana, nr. 7	Ramburs	1	1	1	1
 52390	701.8	Fri Nov 01 11:57:39 EET 2024	Brasov, strada Lalelelor, nr. 34	Card	4	1	7	2
+8444	801.8	Fri Nov 01 12:05:30 EET 2024	Timisoara, str. Unirii, nr 134B	Card	12	1	14	4	

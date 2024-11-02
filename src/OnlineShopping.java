@@ -1,11 +1,10 @@
-import ro.ase.PPOO.Client;
-import ro.ase.PPOO.Produs;
-import ro.ase.PPOO.Comanda;
+import ro.ase.PPOO.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static ro.ase.PPOO.Program.citireClienti;
 import static ro.ase.PPOO.Program.citireProduse;
@@ -20,7 +19,9 @@ public class OnlineShopping {
     private JComboBox<String> comboBoxTipPlata;
     private JTextField textFieldValoareTotala;
     private JButton buttonPlasareComanda;
-    private JFormattedTextField formattedTextField1;
+    private JTextField textFieldDiscount;
+    private JButton buttonBackToMenu;
+    private JButton buttonAplicareReducere;
     private List<int[]> matriceProduseTemp = new ArrayList<>();
     private int[][] matriceProduse;
     private List<Produs> produse;
@@ -35,15 +36,13 @@ public class OnlineShopping {
             numeClienti.add(client.getNume() + " " + client.getPrenume());
         }
 
-        // Înlocuim spinnerClient cu comboBoxClient
         comboBoxClient = new JComboBox<>(numeClienti.toArray(new String[0]));
 
         List<String> numeProduse = new ArrayList<>();
         for (Produs produs : produse) {
-            numeProduse.add(produs.getNume()+", "+produs.getPret()+ " ron, "+ produs.getGarantie() +" luni garantie");
+            numeProduse.add(produs.getNume() + ", " + produs.getPret() + " ron, " + produs.getGarantie() + " luni garantie");
         }
 
-        // Înlocuim spinnerProdus cu comboBoxProdus
         comboBoxProdus = new JComboBox<>(numeProduse.toArray(new String[0]));
 
         spinnerCantitate = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
@@ -51,12 +50,31 @@ public class OnlineShopping {
         adaugaProdusulButton = new JButton("Adaugă produsul în coș");
         textFieldAdresaLivrare = new JTextField(20);
         textFieldValoareTotala = new JTextField(10);
+        textFieldDiscount = new JTextField(10);
         textFieldValoareTotala.setEditable(false);
 
-        // Înlocuim spinnerTipPlata cu comboBoxTipPlata
         comboBoxTipPlata = new JComboBox<>(new String[]{"Card", "Ramburs"});
 
         buttonPlasareComanda = new JButton("Plasează Comanda");
+
+        buttonBackToMenu = new JButton("Înapoi la Meniu");
+        buttonBackToMenu.addActionListener(e -> {
+            MeniuPrincipal meniuPrincipal = new MeniuPrincipal();
+            meniuPrincipal.setVisible(true);
+
+            ((JFrame) SwingUtilities.getWindowAncestor(buttonBackToMenu)).dispose();
+        });
+
+        buttonAplicareReducere = new JButton("Aplică Reducerea");
+
+        buttonAplicareReducere.addActionListener(e -> {
+            try {
+                double totalValoare = calculateTotal();
+                textFieldValoareTotala.setText(String.valueOf(totalValoare));
+            } catch (InvalidDiscountException ex) {
+                JOptionPane.showMessageDialog(null, "A apărut o eroare la aplicarea discountului: " + ex.getMessage());
+            }
+        });
 
         adaugaProdusulButton.addActionListener(e -> {
             int produsIndex = comboBoxProdus.getSelectedIndex();
@@ -66,7 +84,12 @@ public class OnlineShopping {
                 int produsID = produse.get(produsIndex).getId();
                 matriceProduseTemp.add(new int[]{produsID, cantitate});
 
-                double totalValoare = calculateTotal();
+                double totalValoare = 0;
+                try {
+                    totalValoare = calculateTotal();
+                } catch (InvalidDiscountException ex) {
+                    throw new RuntimeException(ex);
+                }
                 textFieldValoareTotala.setText(String.valueOf(totalValoare));
 
                 JOptionPane.showMessageDialog(null, cantitate + " produse au fost adaugate în coș!");
@@ -81,8 +104,14 @@ public class OnlineShopping {
             }
 
             String adresa = textFieldAdresaLivrare.getText();
+            String codDiscount = textFieldDiscount.getText();
             String tipPlata = (String) comboBoxTipPlata.getSelectedItem();
-            double totalValoare = calculateTotal();
+            double totalValoare = 0;
+            try {
+                totalValoare = calculateTotal();
+            } catch (InvalidDiscountException ex) {
+                throw new RuntimeException(ex);
+            }
 
             if (adresa.isEmpty() || matriceProduseTemp.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Te rog completează adresa și adaugă produse în coș!");
@@ -133,16 +162,25 @@ public class OnlineShopping {
         frame.add(new JLabel("Tip de plată:"));
         frame.add(comboBoxTipPlata);
 
+        frame.add(new JLabel("Introduceți codul de reducere:"));
+        frame.add(textFieldDiscount);
+
+        frame.add(buttonAplicareReducere);
+
         frame.add(new JLabel("Valoare totală:"));
         frame.add(textFieldValoareTotala);
 
         frame.add(buttonPlasareComanda);
 
+        frame.add(buttonBackToMenu);
+
         frame.setVisible(true);
     }
 
-    private double calculateTotal() {
+    private double calculateTotal() throws InvalidDiscountException {
         double total = 0;
+        boolean esteDiscountulValid = false;
+
         for (int[] produs : matriceProduseTemp) {
             double price = produse.stream()
                     .filter(p -> p.getId() == produs[0])
@@ -151,8 +189,22 @@ public class OnlineShopping {
                     .orElse(0.0);
             total += price * produs[1];
         }
+
+        if (textFieldDiscount.getText() != null && !textFieldDiscount.getText().isEmpty()) {
+            ServiciiClient serviciiClient = new Comanda();
+            esteDiscountulValid = serviciiClient.aplicaDiscount(textFieldDiscount.getText());
+            if (esteDiscountulValid) {
+                total *= 0.8;
+                JOptionPane.showMessageDialog(null, "Discountul a fost aplicat cu succes!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Discountul introdus nu este valid!");
+                throw new InvalidDiscountException("Nu este codul valid!");
+            }
+        }
+
         return total;
     }
+
 
     private int generateOrderId() {
         return (int) (Math.random() * 100000);

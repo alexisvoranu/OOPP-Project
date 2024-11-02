@@ -2,6 +2,7 @@ package ro.ase.PPOO;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Comanda implements ServiciiClient{
     private int id;
@@ -96,41 +97,26 @@ public class Comanda implements ServiciiClient{
         return "Comanda cu " +
                 "numărul " + id +
                 ", având valoarea totală de " + valoareTotala +
-                " ron a fost plasată cu succes!" + dataPlasare;
+                " ron a fost plasată cu succes!";
     }
 
     @Override
-    public void aplicaDiscount(float discount) throws InvalidDiscountException {
-        if (discount < 0 || discount >= 100) {
-            throw new InvalidDiscountException("Discountul trebuie sa fie o valoare cuprinsa intre 0 si 100");
+    public boolean aplicaDiscount(String codDiscount) throws InvalidDiscountException {
+        if (!(codDiscount.equals("EXTRA20") || codDiscount.equals("FALL20"))) {
+            throw new InvalidDiscountException("Codul de discount introdus nu este valid!");
         }
         else{
-            this.valoareTotala -= this.valoareTotala * (discount / 100);
+            return true;
         }
     }
 
     @Override
-    public Queue<Comanda> vizualizeazaIstoricComenzi(int idClient) {
-        Queue<Comanda> istoricComenzi = new PriorityQueue<>(Comparator.comparing(Comanda::getDataPlasare));
-
-        return istoricComenzi;
-    }
-
-
-    @Override
-    public Object[][] obtineStatisticiClient(int idClient) {
-        Object[][] statistici = new Object[3][2];
-
-        statistici[0][0] = "Numărul total de comenzi";
-        statistici[0][1] = 5;
-
-        statistici[1][0] = "Valoarea totală a comenzilor";
-        statistici[1][1] = 750.0;
-
-        statistici[2][0] = "Data ultimei comenzi";
-        statistici[2][1] = new Date();
-
-        return statistici;
+    public Set<Comanda> vizualizeazaIstoricComenzi(int idClient, Set<Comanda> comenzi) {
+        Set<Comanda> comenziClient = comenzi.stream()
+                .filter(comanda -> comanda.getIdClient() == idClient)
+                .sorted((c1, c2) -> Integer.compare(c1.getId(), c2.getId()))
+                .collect(Collectors.toSet());
+        return comenziClient;
     }
 
     public static void adaugaComandaInFisier(Comanda comanda){

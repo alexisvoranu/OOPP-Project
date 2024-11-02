@@ -1,9 +1,8 @@
 package ro.ase.PPOO;
 
-import java.util.Queue;
+import java.util.Set;
 
 public interface ServiciiClient {
-    void aplicaDiscount(float discount) throws InvalidDiscountException;
-    Queue<Comanda> vizualizeazaIstoricComenzi(int idClient);
-    Object[][] obtineStatisticiClient(int idClient);
+    boolean aplicaDiscount(String codDiscount) throws InvalidDiscountException;
+    Set<Comanda> vizualizeazaIstoricComenzi(int idClient, Set<Comanda> comenzi);
 }
