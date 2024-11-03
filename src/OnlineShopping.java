@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import static ro.ase.PPOO.Program.citireClienti;
 import static ro.ase.PPOO.Program.citireProduse;
@@ -68,12 +67,10 @@ public class OnlineShopping {
         buttonAplicareReducere = new JButton("Aplică Reducerea");
 
         buttonAplicareReducere.addActionListener(e -> {
-            try {
-                double totalValoare = calculateTotal();
-                textFieldValoareTotala.setText(String.valueOf(totalValoare));
-            } catch (InvalidDiscountException ex) {
-                JOptionPane.showMessageDialog(null, "A apărut o eroare la aplicarea discountului: " + ex.getMessage());
-            }
+            if (textFieldDiscount.getText() == null || textFieldDiscount.getText().isEmpty())
+                throw new NullPointerException();
+            double totalValoare = calculateTotal();
+            textFieldValoareTotala.setText(String.valueOf(totalValoare));
         });
 
         adaugaProdusulButton.addActionListener(e -> {
@@ -85,11 +82,7 @@ public class OnlineShopping {
                 matriceProduseTemp.add(new int[]{produsID, cantitate});
 
                 double totalValoare = 0;
-                try {
-                    totalValoare = calculateTotal();
-                } catch (InvalidDiscountException ex) {
-                    throw new RuntimeException(ex);
-                }
+                totalValoare = calculateTotal();
                 textFieldValoareTotala.setText(String.valueOf(totalValoare));
 
                 JOptionPane.showMessageDialog(null, cantitate + " produse au fost adaugate în coș!");
@@ -107,11 +100,7 @@ public class OnlineShopping {
             String codDiscount = textFieldDiscount.getText();
             String tipPlata = (String) comboBoxTipPlata.getSelectedItem();
             double totalValoare = 0;
-            try {
-                totalValoare = calculateTotal();
-            } catch (InvalidDiscountException ex) {
-                throw new RuntimeException(ex);
-            }
+            totalValoare = calculateTotal();
 
             if (adresa.isEmpty() || matriceProduseTemp.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Te rog completează adresa și adaugă produse în coș!");
@@ -177,7 +166,7 @@ public class OnlineShopping {
         frame.setVisible(true);
     }
 
-    private double calculateTotal() throws InvalidDiscountException {
+    private double calculateTotal() {
         double total = 0;
         boolean esteDiscountulValid = false;
 
@@ -198,9 +187,9 @@ public class OnlineShopping {
                 JOptionPane.showMessageDialog(null, "Discountul a fost aplicat cu succes!");
             } else {
                 JOptionPane.showMessageDialog(null, "Discountul introdus nu este valid!");
-                throw new InvalidDiscountException("Nu este codul valid!");
             }
         }
+
 
         return total;
     }

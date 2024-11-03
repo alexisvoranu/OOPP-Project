@@ -101,13 +101,8 @@ public class Comanda implements ServiciiClient{
     }
 
     @Override
-    public boolean aplicaDiscount(String codDiscount) throws InvalidDiscountException {
-        if (!(codDiscount.equals("EXTRA20") || codDiscount.equals("FALL20"))) {
-            throw new InvalidDiscountException("Codul de discount introdus nu este valid!");
-        }
-        else{
-            return true;
-        }
+    public boolean aplicaDiscount(String codDiscount)  {
+        return codDiscount.equals("EXTRA20") || codDiscount.equals("FALL20");
     }
 
     @Override

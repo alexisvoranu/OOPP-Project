@@ -7,7 +7,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static ro.ase.PPOO.Program.citireClienti;
 import static ro.ase.PPOO.Program.citireComenzi;
@@ -73,7 +72,7 @@ public class IstoricComenzi {
             int idClient = clienti.get(selectedClientIndex).getId();
 
             ServiciiClient serviciiClient = new Comanda();
-            Set<Comanda> comenziClient = serviciiClient.vizualizeazaIstoricComenzi(idClient,comenzi);
+            Set<Comanda> comenziClient = serviciiClient.vizualizeazaIstoricComenzi(idClient, comenzi);
 
             if (comenziClient.isEmpty()) {
                 textAreaComenzi.append("Clientul selectat nu are comenzi.\n");

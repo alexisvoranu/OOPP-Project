@@ -11,8 +11,9 @@ public class MeniuPrincipal extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JButton openShoppingButton = new JButton("Deschide Fereastra de Cumpărături");
+        JButton openShoppingButton = new JButton("Deschide fereastra de cumpărături");
         JButton openOrdersHistory = new JButton("Vezi istoric cumpărături");
+        JButton openClientStatistics = new JButton("Vezi statistici client");
         openShoppingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -29,9 +30,18 @@ public class MeniuPrincipal extends JFrame {
             }
         });
 
+        openClientStatistics.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new StatisticiClient();
+                dispose();
+            }
+        });
+
         setLayout(new FlowLayout());
         add(openShoppingButton);
         add(openOrdersHistory);
+        add(openClientStatistics);
     }
 
     public static void main(String[] args) {

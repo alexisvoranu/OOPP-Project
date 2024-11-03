@@ -1,6 +1,6 @@
 1,Televizor Samsung 55",3200.50,24
 2,Laptop Dell Inspiron,4500.00,36
-3,Smartphone iPhone 14,5400.99,12
+3,Smartphone iPhone 14,5400.99,3
 4,Frigider LG,3800.75,24
 5,Masina de spalat Samsung,2600.30,24
 6,Aspirator Philips,800.45,12
