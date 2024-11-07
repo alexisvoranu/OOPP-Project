@@ -142,7 +142,7 @@ public class OnlineShopping {
             }
         });
 
-        JFrame frame = new JFrame("Selectează clientul și produsul");
+        JFrame frame = new JFrame("Plasează o comandă");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
         frame.setLayout(new java.awt.FlowLayout());

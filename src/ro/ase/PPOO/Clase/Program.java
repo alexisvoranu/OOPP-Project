@@ -28,7 +28,7 @@ public class Program {
             while ((linie = fisier.readLine()) != null) {
                 int numarVirgule = linie.length() - linie.replace(",", "").length();
                 if (numarVirgule != NUMAR_VIRGULE_ASTEPTAT) {
-                    throw new InvalidNumberOfDataInFile("Fisierul clienti.txt nu contine toate informațiile necesare unui client!");
+                    throw new InvalidNumberOfDataInFileException("Fisierul clienti.txt nu contine toate informațiile necesare unui client!");
                 }
 
                 String[] valori = linie.split(",");
@@ -46,7 +46,7 @@ public class Program {
                         valori[4]);
                 clienti.add(client);
             }
-        } catch (IOException | InvalidNumberOfDataInFile e) {
+        } catch (IOException | InvalidNumberOfDataInFileException e) {
             throw new RuntimeException(e);
         }
         return clienti;
@@ -69,7 +69,7 @@ public class Program {
             while ((linie = fisier.readLine()) != null) {
                 int numarVirgule = linie.length() - linie.replace(",", "").length();
                 if (numarVirgule != NUMAR_VIRGULE_ASTEPTAT) {
-                    throw new InvalidNumberOfDataInFile("Fisierul produse.txt nu contine toate informațiile necesare unui produs!");
+                    throw new InvalidNumberOfDataInFileException("Fisierul produse.txt nu contine toate informațiile necesare unui produs!");
                 }
 
                 String[] valori = linie.split(",");
@@ -86,7 +86,7 @@ public class Program {
                         Integer.parseInt(valori[3]));
                 produse.add(produs);
             }
-        } catch (IOException | InvalidNumberOfDataInFile e) {
+        } catch (IOException | InvalidNumberOfDataInFileException e) {
             throw new RuntimeException(e);
         }
         return produse;
@@ -128,7 +128,7 @@ public class Program {
 
                 int numarTabs = linie.length() - linie.replace("\t", "").length();
                 if (numarTabs != (NUMAR_TABS_ASTEPTAT + (nrProduse * 2))) {
-                    throw new InvalidNumberOfDataInFile("Fisierul comenzi.txt nu contine toate informațiile necesare unei comenzi! "+numarTabs);
+                    throw new InvalidNumberOfDataInFileException("Fisierul comenzi.txt nu contine toate informațiile necesare unei comenzi! ");
                 }
 
                 int[][] produse = new int[nrProduse][2];
@@ -157,7 +157,7 @@ public class Program {
                 comenzi.add(comanda);
             }
 
-        } catch (IOException | ParseException | InvalidQunatityException | InvalidNumberOfDataInFile e) {
+        } catch (IOException | ParseException | InvalidQunatityException | InvalidNumberOfDataInFileException e) {
             throw new RuntimeException(e);
         }
         return comenzi;

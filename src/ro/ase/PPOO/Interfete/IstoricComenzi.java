@@ -23,7 +23,6 @@ public class IstoricComenzi {
     private Set<Comanda> comenzi;
     private JButton buttonBackToMenu;
 
-
     public IstoricComenzi() {
         clienti = citireClienti();
         comenzi = citireComenzi();

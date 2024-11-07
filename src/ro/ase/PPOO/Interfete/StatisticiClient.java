@@ -29,9 +29,7 @@ public class StatisticiClient {
         clienti = citireClienti();
         comenzi = citireComenzi();
 
-        List<String> numeClienti = clienti.stream()
-                .map(client -> client.getNume() + " " + client.getPrenume())
-                .collect(Collectors.toList());
+        List<String> numeClienti = clienti.stream().map(client -> client.getNume() + " " + client.getPrenume()).collect(Collectors.toList());
 
         comboBoxClient = new JComboBox<>(numeClienti.toArray(new String[0]));
 
@@ -70,7 +68,7 @@ public class StatisticiClient {
     }
 
     /**
-     Afișează statisticile pentru clientul selectat în comboBoxClient, incluzând informațiile prezentate anterior
+     * Afișează statisticile pentru clientul selectat în comboBoxClient, incluzând informațiile prezentate anterior
      */
     private void afiseazaStatisticiClient() {
         textAreaStatistici.setText("");
@@ -79,9 +77,7 @@ public class StatisticiClient {
         if (selectedClientIndex >= 0 && selectedClientIndex < clienti.size()) {
             int idClient = clienti.get(selectedClientIndex).getId();
 
-            List<Comanda> comenziClient = comenzi.stream()
-                    .filter(comanda -> comanda.getIdClient() == idClient)
-                    .collect(Collectors.toList());
+            List<Comanda> comenziClient = comenzi.stream().filter(comanda -> comanda.getIdClient() == idClient).collect(Collectors.toList());
 
             int numarComenzi = comenziClient.size();
             int totalProduse = 0;
