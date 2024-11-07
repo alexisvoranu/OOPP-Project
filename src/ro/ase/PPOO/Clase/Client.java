@@ -1,4 +1,4 @@
-package ro.ase.PPOO;
+package ro.ase.PPOO.Clase;
 
 public class Client {
     private int id;
@@ -6,9 +6,6 @@ public class Client {
     private String prenume;
     private String email;
     private String nrTelefon;
-
-    public Client() {
-    }
 
     public Client(int id, String nume, String prenume, String email, String nrTelefon) {
         this.id = id;

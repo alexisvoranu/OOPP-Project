@@ -1,17 +1,22 @@
-import ro.ase.PPOO.*;
+package ro.ase.PPOO.Interfete;
+
+import ro.ase.PPOO.Clase.Client;
+import ro.ase.PPOO.Clase.Comanda;
+import ro.ase.PPOO.Clase.Produs;
+import ro.ase.PPOO.Clase.ServiciiClient;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static ro.ase.PPOO.Program.citireClienti;
-import static ro.ase.PPOO.Program.citireProduse;
-import static ro.ase.PPOO.Comanda.adaugaComandaInFisier;
+import static ro.ase.PPOO.Clase.Program.citireClienti;
+import static ro.ase.PPOO.Clase.Program.citireProduse;
+import static ro.ase.PPOO.Clase.Comanda.adaugaComandaInFisier;
 
 /**
- * Clasa OnlineShopping implementează o interfață grafică pentru realizarea unei comenzi online.
- * Permite selectarea unui client, a mai multor produse, specificarea cantității și aplicarea unui cod de reducere.
+ * Clasa OnlineShopping implementează o interfață grafică pentru realizarea unei comenzi online
+ * Permite selectarea unui client, a mai multor produse, specificarea cantității și aplicarea unui cod de reducere
  */
 public class OnlineShopping {
     private JComboBox<String> comboBoxClient;

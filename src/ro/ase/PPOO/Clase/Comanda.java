@@ -1,10 +1,10 @@
-package ro.ase.PPOO;
+package ro.ase.PPOO.Clase;
 
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Comanda implements ServiciiClient{
+public class Comanda implements ServiciiClient {
     private int id;
     private double valoareTotala;
     private Date dataPlasare;
@@ -101,7 +101,7 @@ public class Comanda implements ServiciiClient{
     }
 
     @Override
-    public boolean aplicaDiscount(String codDiscount)  {
+    public boolean aplicaDiscount(String codDiscount) {
         return codDiscount.equals("EXTRA20") || codDiscount.equals("FALL20");
     }
 
@@ -113,14 +113,19 @@ public class Comanda implements ServiciiClient{
         return comenziClient;
     }
 
-    public static void adaugaComandaInFisier(Comanda comanda){
+    public static void adaugaComandaInFisier(Comanda comanda) {
         try (var fisier = new BufferedWriter(new FileWriter(
                 "C:\\Users\\Alex Isvoranu\\Desktop\\Facultate\\PPOO\\Proiect\\src\\ro\\ase\\PPOO\\Date\\comenzi.txt", true))) {
-            fisier.write(comanda.id+"\t"+comanda.valoareTotala+"\t"+
-                    comanda.dataPlasare+"\t"+comanda.adresaLivrare+"\t"+
-                    comanda.tipPlata+"\t"+comanda.idClient+"\t"+comanda.nrProduse+"\t");
-            for(int i=0;i<comanda.nrProduse;i++)
-                fisier.write(comanda.produse[i][0]+"\t"+comanda.produse[i][1]+"\t");
+            fisier.write(comanda.id + "\t" + comanda.valoareTotala + "\t" +
+                    comanda.dataPlasare + "\t" + comanda.adresaLivrare + "\t" +
+                    comanda.tipPlata + "\t" + comanda.idClient + "\t" + comanda.nrProduse + "\t");
+            for (int i = 0; i < comanda.nrProduse; i++) {
+                if (i == comanda.nrProduse - 1)
+                    fisier.write(comanda.produse[i][0] + "\t" + comanda.produse[i][1]);
+                else
+                    fisier.write(comanda.produse[i][0] + "\t" + comanda.produse[i][1] + "\t");
+
+            }
             fisier.newLine();
         } catch (IOException e) {
             throw new RuntimeException(e);

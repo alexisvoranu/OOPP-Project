@@ -1,14 +1,16 @@
+package ro.ase.PPOO.Interfete;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Clasa MeniuPrincipal reprezintă fereastra principală a aplicației
+ * Oferă opțiuni clare oricărui utilizator
+ */
 public class MeniuPrincipal extends JFrame {
 
-    /**
-     * Clasa MeniuPrincipal reprezintă fereastra principală a aplicației
-     * Oferă opțiuni clare oricărui utilizator
-     */
     public MeniuPrincipal() {
         setTitle("Meniu Principal");
         setSize(300, 200);

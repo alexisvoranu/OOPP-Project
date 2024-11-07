@@ -1,13 +1,10 @@
-package ro.ase.PPOO;
+package ro.ase.PPOO.Clase;
 
 public class Produs {
     private int id;
     private String nume;
     private double pret;
     private int garantie;
-
-    public Produs() {
-    }
 
     public Produs(int id, String nume, double pret, int garantie) {
         this.id = id;

@@ -1,6 +1,8 @@
-import ro.ase.PPOO.Client;
-import ro.ase.PPOO.Comanda;
-import ro.ase.PPOO.ServiciiClient;
+package ro.ase.PPOO.Interfete;
+
+import ro.ase.PPOO.Clase.Client;
+import ro.ase.PPOO.Clase.Comanda;
+import ro.ase.PPOO.Clase.ServiciiClient;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,9 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static ro.ase.PPOO.Program.citireClienti;
-import static ro.ase.PPOO.Program.citireComenzi;
+import static ro.ase.PPOO.Clase.Program.citireClienti;
+import static ro.ase.PPOO.Clase.Program.citireComenzi;
 
+/**
+ * Clasa IstoricComenzi permite vizualizarea istoricului comenzilor efectuate de un client selectat
+ */
 public class IstoricComenzi {
     private JComboBox<String> comboBoxClient;
     private JTextArea textAreaComenzi;

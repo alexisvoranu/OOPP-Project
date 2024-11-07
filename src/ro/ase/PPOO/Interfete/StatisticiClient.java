@@ -1,7 +1,9 @@
-import ro.ase.PPOO.Client;
-import ro.ase.PPOO.Comanda;
-import ro.ase.PPOO.Produs;
-import ro.ase.PPOO.Program;
+package ro.ase.PPOO.Interfete;
+
+import ro.ase.PPOO.Clase.Client;
+import ro.ase.PPOO.Clase.Comanda;
+import ro.ase.PPOO.Clase.Produs;
+import ro.ase.PPOO.Clase.Program;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ro.ase.PPOO.Program.*;
+import static ro.ase.PPOO.Clase.Program.*;
 
 /**
  * Clasa StatisticiClient reprezintă o interfață grafică pentru vizualizarea statisticilor comenzilor unui client selectat

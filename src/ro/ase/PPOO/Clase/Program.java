@@ -1,4 +1,4 @@
-package ro.ase.PPOO;
+package ro.ase.PPOO.Clase;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -100,7 +100,7 @@ public class Program {
      * @throws RuntimeException dacă există o eroare de citire a fișierului sau datele sunt incomplete
      */
     public static Set<Comanda> citireComenzi() {
-        final int NUMAR_TABS_ASTEPTAT = 7;
+        final int NUMAR_TABS_ASTEPTAT = 6;
         Set<Comanda> comenzi = new TreeSet<>(Comparator.comparing(Comanda::getDataPlasare));
 
         try (BufferedReader fisier = new BufferedReader(new FileReader(
@@ -127,7 +127,7 @@ public class Program {
                 int nrProduse = Integer.parseInt(valori[6]);
 
                 int numarTabs = linie.length() - linie.replace("\t", "").length();
-                if (numarTabs != (NUMAR_TABS_ASTEPTAT + nrProduse * 2)) {
+                if (numarTabs != (NUMAR_TABS_ASTEPTAT + (nrProduse * 2))) {
                     throw new InvalidNumberOfDataInFile("Fisierul comenzi.txt nu contine toate informațiile necesare unei comenzi! "+numarTabs);
                 }
 

@@ -1,4 +1,6 @@
-import ro.ase.PPOO.Produs;
+package ro.ase.PPOO.Interfete;
+
+import ro.ase.PPOO.Clase.Produs;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,7 +8,7 @@ import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ro.ase.PPOO.Program.*;
+import static ro.ase.PPOO.Clase.Program.*;
 
 /**
  * Clasa GestionareProduse permite adăugarea, modificarea și ștergerea produselor printr-o interfață dedicată ce permite vizualizarea detaliilor acestora
