@@ -1,6 +1,6 @@
 # Online Store Management System
 
-A robust Java-based desktop application designed for efficient e-commerce management, providing a complete solution for handling product inventories, customer orders, and sales data analytics.
+A robust Java-based desktop application developed as a final project for the Object-Oriented Design and Programming course. It is designed for efficient e-commerce management, providing a complete solution for handling product inventories, customer orders, and sales data analytics through clean, maintainable, and object-oriented code.
 
 ## Technical Overview
 
